@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER "Hiroki Takeyama"
+LABEL maintainer="scanflove"
 
 # timezone
 RUN apt update && apt install -y tzdata; \
