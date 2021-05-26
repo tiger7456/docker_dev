@@ -13,7 +13,7 @@ Star this repository if it is useful for you.
     FROM ubuntu:20.04  
     MAINTAINER "scanflove"
     
-    ENV TZ Asia/Tokyo
+    ENV TZ Asia/Shanghai
     
     ENV ROOT_PASSWORD root
     
