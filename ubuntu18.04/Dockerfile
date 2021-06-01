@@ -7,20 +7,27 @@ RUN apt update && apt install -y tzdata; \
 
 
 # base
-RUN apt-get install -y wget git gcc apt-utils  g++  cmake build-essential vim curl gdb  autoconf libtool
+RUN apt-get install -y wget git gcc apt-utils  g++  cmake build-essential vim curl gdb  autoconf libtool unzip net-tools
 
 # golang
 RUN wget -P /tmp https://studygolang.com/dl/golang/go1.16.4.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf /tmp/go1.16.4.linux-amd64.tar.gz
 RUN rm /tmp/go1.16.4.linux-amd64.tar.gz
 
-# ENV GOPATH /usr/local/go
+ENV GOPATH /usr/local/go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:/root/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 # 启用 Go Modules 功能
 ENV GO111MODULE on
 # 配置 GOPROXY 环境变量
 ENV GOPROXY https://goproxy.cn
+
+RUN echo 'export GOROOT=/usr/local/go\n\
+export PATH=$PATH:$GOROOT/bin:/root/go/bin\n\
+export GO111MODULE=on\n\
+export GOPROXY=https://goproxy.cn\n'\
+>/etc/profile
+
 # gRPC环境安装
 RUN apt install -y golang-goprotobuf-dev
 RUN go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
