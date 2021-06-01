@@ -9,7 +9,7 @@ RUN apt update && apt install -y tzdata; \
 # base
 RUN apt-get install -y build-essential vim curl gdb autoconf libtool unzip net-tools
 RUN apt-get install -y wget
-RUN apt-get install -y git
+# RUN apt-get install -y git
 RUN apt-get install -y gcc apt-utils
 RUN apt-get install -y g++ cmake
 
