@@ -52,7 +52,7 @@ RUN ln -s /usr/bin/fromdos /usr/bin/dos2unix
 RUN ln -s /usr/share/aclocal /usr/local/share/aclocal
 
 # JDK
-RUN apt-get install -y openjdk-8-jdk
+# RUN apt-get install -y openjdk-8-jdk
 # 执行命令(这里创建了一个目录)
 # RUN mkdir /usr/local/java
 # 和copy一样，复制文件到指定目录，但是copy不能解压，add自动解压
