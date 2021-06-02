@@ -6,13 +6,32 @@ RUN apt update && apt install -y tzdata; \
     apt clean;
 
 
-# base
-RUN apt-get install -y build-essential vim curl gdb autoconf libtool unzip net-tools
-RUN apt-get install -y wget lrzsz
-# RUN apt-get install -y git
-RUN apt-get install -y gcc apt-utils
-RUN apt-get install -y g++ cmake
 
+
+
+
+# sshd
+RUN mkdir /run/sshd; \
+    apt install -y openssh-server; \
+    sed -i 's/^#\(PermitRootLogin\) .*/\1 yes/' /etc/ssh/sshd_config; \
+    sed -i 's/^\(UsePAM yes\)/# \1/' /etc/ssh/sshd_config; \
+    apt clean;
+
+# entrypoint
+RUN { \
+    echo '#!/bin/bash -eu'; \
+    echo 'ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime'; \
+    echo 'echo "root:${ROOT_PASSWORD}" | chpasswd'; \
+    echo 'exec "$@"'; \
+    } > /usr/local/bin/entry_point.sh; \
+    chmod +x /usr/local/bin/entry_point.sh;
+
+
+# base
+RUN apt update && apt-get install -y build-essential vim curl gdb autoconf libtool unzip net-tools wget lrzsz  apt-utils g++ cmake; \
+    apt clean;
+
+# RUN apt-get install -y git
 
 # golang
 RUN wget -P /tmp https://studygolang.com/dl/golang/go1.16.4.linux-amd64.tar.gz
@@ -64,22 +83,6 @@ RUN ln -s /usr/share/aclocal /usr/local/share/aclocal
 # ENV JRE_HOME ${JAVA_HOME}/jre 
 # ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib 
 # ENV PATH ${JAVA_HOME}/bin:$PATH 
-
-# sshd
-RUN mkdir /run/sshd; \
-    apt install -y openssh-server; \
-    sed -i 's/^#\(PermitRootLogin\) .*/\1 yes/' /etc/ssh/sshd_config; \
-    sed -i 's/^\(UsePAM yes\)/# \1/' /etc/ssh/sshd_config; \
-    apt clean;
-
-# entrypoint
-RUN { \
-    echo '#!/bin/bash -eu'; \
-    echo 'ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime'; \
-    echo 'echo "root:${ROOT_PASSWORD}" | chpasswd'; \
-    echo 'exec "$@"'; \
-    } > /usr/local/bin/entry_point.sh; \
-    chmod +x /usr/local/bin/entry_point.sh;
 
 ENV TZ Asia/Shanghai
 
